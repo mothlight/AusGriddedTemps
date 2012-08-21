@@ -287,10 +287,11 @@ public class WriteNetCDF
 		 final int TIME = timeVector.getLength();
 		 
 		 final int latCenter = 560;
-		 final int longCenter = 656;
+		 //final int longCenter = 656;
+		 final int longCenter = 660;
 		 
-		 final int latSize = 100;
-		 final int longSize = 100;
+		 final int latSize = 30;  //y
+		 final int longSize = 30;  //x
 		 
 		 
 //		 final int latCenter = 680/2;
@@ -472,13 +473,23 @@ public class WriteNetCDF
 								// Mortality = 0.1 * Tmean
 								// Morbidity = 0.01 * Tmean
 								
-								float tMean = (tempMax + tempMin )/2;	
+								// new formulas
+								// y = ax^c , a = 1.0048157,c = 8.0023051
+								// y = a + bx^c, b = 1.43463393 e-13
+								
+								float a = 1.0048157f;
+								float b = 1.43463393e-13f;
+								float c = 8.0023051f;
+								
+								float tMean = (tempMax + tempMin ) / 2;	
 								dataTempMean.set(record, lvl, latLoopCount, lonLoopCount, tMean);
 								
-								float morbidityValue = (float) (0.1 * tMean);								
+								//float morbidityValue = (float) (0.1 * tMean);		
+								float morbidityValue = a * (float)Math.pow(tMean, c);
 								morbidityArray.set(record, lvl, latLoopCount, lonLoopCount, morbidityValue);
 								
-								float mortalityValue = (float) (0.01 * tMean);
+								//float mortalityValue = (float) (0.01 * tMean);
+								float mortalityValue = a  + b * (float)Math.pow(tMean, c);
 								mortalityArray.set(record, lvl, latLoopCount, lonLoopCount, mortalityValue);
 								
 								count++;								

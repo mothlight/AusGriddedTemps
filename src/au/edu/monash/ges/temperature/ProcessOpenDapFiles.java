@@ -39,7 +39,9 @@ public class ProcessOpenDapFiles
 		
 		int numberOfFiles = dataForMaxTemps.size();
 		
-		for (int i=0;i<60;i++)
+		int start = 30;
+		int end = 32;
+		for (int i=start;i<end;i++)
 		{
 			DataDDS maxDDS = null;
 			DataDDS minDDS = null;
