@@ -25,31 +25,39 @@ public class ProcessOpenDapFiles
 	
 	public void process()
 	{
-		String filename = "TempMaxMinMelbourne-Jan1980.nc";
+		String filename = "TempMaxMinMelbourne-Jan1980-2010.nc";
 		OpenDapDir openDapDirMax = new OpenDapDir(baseUrlMax, baseUrlOpendapMax);
 		OpenDapDir openDapDirMin = new OpenDapDir(baseUrlMin, baseUrlOpendapMin);
-		TreeMap<String, ArrayList<String>> filesUrlsMax = openDapDirMax.getFilesForYears(1980, 1981);
-		TreeMap<String, ArrayList<String>> filesUrlsMin = openDapDirMin.getFilesForYears(1980, 1981);
+		TreeMap<String, ArrayList<String>> filesUrlsMax = openDapDirMax.getFilesForYears(1980, 1990);
+		TreeMap<String, ArrayList<String>> filesUrlsMin = openDapDirMin.getFilesForYears(1980, 1990);
 		//System.out.println(filesUrlsMax.toString());
 		
 		OpenDapFile openDapFile = new OpenDapFile();
 		
-		ArrayList<String> dataForMaxTemps = filesUrlsMax.get("1980");
-		ArrayList<String> dataForMinTemps = filesUrlsMin.get("1980");
+		String[] years = {"1982","1983","1984","1985","1986","1987","1988","1989"};
 		
-		int numberOfFiles = dataForMaxTemps.size();
-		
-		int start = 30;
-		int end = 32;
-		for (int i=start;i<end;i++)
+		for (String year : years)
 		{
-			DataDDS maxDDS = null;
-			DataDDS minDDS = null;
-			maxDDS = openDapFile.getFileReturn(dataForMaxTemps.get(i));
-			minDDS = openDapFile.getFileReturn(dataForMinTemps.get(i));
-			openDapFile.process(maxDDS, minDDS, filename);
-			//openDapFile.getFile(dataFor1970Min.get(i));
+			ArrayList<String> dataForMaxTemps = filesUrlsMax.get(year);
+			ArrayList<String> dataForMinTemps = filesUrlsMin.get(year);
+			
+			int numberOfFiles = dataForMaxTemps.size();
+			
+			int start = 0;
+			//int end = 32;
+			for (int i=start;i<numberOfFiles;i++)
+			{
+				DataDDS maxDDS = null;
+				DataDDS minDDS = null;
+				maxDDS = openDapFile.getFileReturn(dataForMaxTemps.get(i));
+				minDDS = openDapFile.getFileReturn(dataForMinTemps.get(i));
+				System.out.println(year + " " + i);
+				openDapFile.process(maxDDS, minDDS, filename);
+				//openDapFile.getFile(dataFor1970Min.get(i));
+			}
 		}
+		
+		
 		
 	}
 
